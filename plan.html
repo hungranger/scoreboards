@@ -235,8 +235,7 @@
 
     <footer class="bg-stone-200 text-stone-600 py-6 mt-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-            <p>&copy; 2025 MBA Study Trip Plan. Based on Program Manager Exercise.</p>
-            <p>Designed for illustrative and assessment purposes.</p>
+            <p>&copy; Trang Vu's Program Manager Exercise.</p>
         </div>
     </footer>
 
@@ -347,7 +346,7 @@
 
             const contentDiv = document.createElement('div');
             contentDiv.id = `content-${id}`;
-            contentDiv.classList.add('accordion-content', 'p-4', 'bg-white', 'border-t', 'border-stone-200');
+            contentDiv.classList.add('accordion-content', 'bg-white', 'border-t', 'border-stone-200');
             contentDiv.innerHTML = contentHtml;
 
             itemDiv.appendChild(button);
@@ -356,16 +355,23 @@
 
             button.addEventListener('click', () => {
                 const isOpening = !contentDiv.classList.contains('open');
-                // Close all other accordions in the same group
+                // Close all other accordions in the same group FIRST
                 Array.from(parentElement.querySelectorAll('.accordion-content.open')).forEach(openContent => {
                     if (openContent !== contentDiv) {
                         openContent.classList.remove('open');
                         openContent.previousElementSibling.setAttribute('aria-expanded', 'false');
                         openContent.previousElementSibling.querySelector('span:last-child').style.transform = 'rotate(0deg)';
+                        // openContent.classList.remove('p-4');
                     }
                 });
-                // Toggle current accordion
-                contentDiv.classList.toggle('open');
+                // Now toggle current accordion (open or close)
+                if (isOpening) {
+                    contentDiv.classList.add('open');
+                    // contentDiv.classList.add('p-4');
+                } else {
+                    contentDiv.classList.remove('open');
+                    // contentDiv.classList.remove('p-4');
+                }
                 button.setAttribute('aria-expanded', isOpening);
                 iconSpan.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
             });
@@ -373,7 +379,7 @@
 
         // Populate Itinerary
         itineraryData.forEach((item, index) => {
-            let detailsHtml = '<ul class="space-y-3 list-disc list-inside pl-2 text-stone-700">';
+            let detailsHtml = '<ul class="space-y-3 list-disc list-inside text-stone-700 p-4">';
             item.details.forEach(detail => {
                 detailsHtml += `<li class="leading-relaxed"><strong class="text-stone-800">${detail.time} - ${detail.activity}:</strong> ${detail.desc}</li>`;
             });
@@ -383,7 +389,7 @@
 
         // Populate Risks
         riskData.forEach((item, index) => {
-            let riskHtml = `<div class="space-y-2 text-stone-700">
+            let riskHtml = `<div class="space-y-2 text-stone-700 p-4">
                 <p><strong class="text-stone-800">Specific Risk:</strong> ${item.specificRisk}</p>
                 <p><strong class="text-stone-800">Likelihood:</strong> <span class="font-semibold ${item.likelihood === 'High' ? 'text-red-600' : item.likelihood === 'Medium' ? 'text-amber-600' : 'text-green-600'}">${item.likelihood}</span></p>
                 <p><strong class="text-stone-800">Impact:</strong> <span class="font-semibold ${item.impact === 'High' ? 'text-red-600' : item.impact === 'Medium' ? 'text-amber-600' : 'text-green-600'}">${item.impact}</span></p>
