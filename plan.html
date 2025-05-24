@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBA Study Trip Plan: Ho Chi Minh City</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Executive Summary: Text block (HTML/Tailwind) for overview.
+        - Objectives: Bulleted lists (HTML/Tailwind) for clarity.
+        - Itinerary: Clickable daily cards/accordions (HTML/Tailwind/JS) for focused detail.
+        - Budget: Chart.js Donut chart for allocation, HTML table for details. Goal: Inform/Compare.
+        - Risks: Interactive cards (HTML/Tailwind/JS) for organized risk details. Goal: Inform/Organize.
+        - Communication: Phased text blocks (HTML/Tailwind) for clarity. Goal: Inform/Organize.
+        All designed to be interactive and clear, avoiding SVG/Mermaid. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            border-bottom-width: 4px;
+            border-color: #0D9488; /* teal-600 */
+            color: #0D9488; /* teal-600 */
+            font-weight: 600;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px; /* Adjusted for better donut chart display */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px; /* Adjusted */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 1500px; /* Adjust if content is larger */
+        }
+        /* Custom scrollbar for better aesthetics if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0D9488; /* teal-600 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0F766E; /* teal-700 */
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <header class="bg-teal-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-center">MBA Study Trip Plan: Ho Chi Minh City, Vietnam</h1>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-[72px] sm:top-[80px] z-40">
+        <div class="container mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex justify-center space-x-1 sm:space-x-2 md:space-x-4 overflow-x-auto py-3">
+                <button data-tab="overview" class="tab-button active text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Overview</button>
+                <button data-tab="objectives" class="tab-button text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Objectives</button>
+                <button data-tab="itinerary" class="tab-button text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Itinerary</button>
+                <button data-tab="budget" class="tab-button text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Budget</button>
+                <button data-tab="risks" class="tab-button text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Risks</button>
+                <button data-tab="communication" class="tab-button text-sm sm:text-base px-3 py-2 rounded-t-lg text-stone-600 hover:text-teal-600">Communication</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <section id="overview" class="content-section active bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-4">Executive Summary</h2>
+            <p class="mb-4 text-stone-700 leading-relaxed">
+                This interactive application outlines a meticulously developed plan for a one-week study trip to Ho Chi Minh City, Vietnam, for 25 MBA students. The program aims to provide deep insights into the Vietnamese business environment, including visits to major companies, innovation hubs, and entrepreneurs, alongside enriching cultural experiences, all within a USD 20,000 budget.
+            </p>
+            <p class="text-stone-700 leading-relaxed">
+                The plan emphasizes a dual focus: intensive business immersion and authentic cultural engagement, ensuring a holistic learning experience. It demonstrates robust program management through a detailed itinerary, careful budget management, proactive risk assessment, and a clear client communication strategy. Explore the tabs above to delve into each component of this impactful educational initiative.
+            </p>
+        </section>
+
+        <section id="objectives" class="content-section bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-6">Trip Objectives & Learning Outcomes</h2>
+            <p class="mb-6 text-stone-700 leading-relaxed">
+                This section details the core goals of the study trip to Ho Chi Minh City and the specific learning outcomes anticipated for the MBA students. The program is designed to offer a rich blend of academic insights, practical business exposure, and cultural understanding, directly aligning with the strategic development of globally-minded leaders.
+            </p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">Main Objectives</h3>
+                    <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><span class="font-semibold">Deep Dive into Vietnamese Business:</span> Provide comprehensive, firsthand insights into the dynamic Vietnamese business environment, its characteristics, growth drivers, and challenges.</li>
+                        <li><span class="font-semibold">Industry Trends & Innovation:</span> Facilitate understanding of local industry trends, explore burgeoning innovation ecosystems, and gain exposure to vibrant entrepreneurial landscapes.</li>
+                        <li><span class="font-semibold">Cultural Immersion:</span> Offer immersive cultural experiences to broaden global perspectives and enhance cross-cultural understanding.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">Key Learning Outcomes</h3>
+                    <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><span class="font-semibold">Understanding Industry Trends:</span> Acquire practical knowledge through direct engagement with major companies.</li>
+                        <li><span class="font-semibold">Networking Opportunities:</span> Foster meaningful interactions with local business leaders and entrepreneurs.</li>
+                        <li><span class="font-semibold">Gaining Cultural Insights:</span> Develop a nuanced appreciation for Vietnamese culture and its influence on business.</li>
+                        <li><span class="font-semibold">Practical Application:</span> Apply theoretical business knowledge to real-world scenarios in an emerging market.</li>
+                        <li><span class="font-semibold">Global Mindset Development:</span> Foster adaptability, resilience, and a sophisticated understanding of international business operations.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="itinerary" class="content-section bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-6">Simplified Itinerary: 7-Day Ho Chi Minh City Immersion</h2>
+            <p class="mb-6 text-stone-700 leading-relaxed">
+                The following is a day-by-day schedule for the MBA study trip. Each day is designed to balance business engagements, cultural immersion, and necessary downtime. Click on each day to expand and view the detailed activities and learning focus. The itinerary prioritizes thematic grouping, experiential learning, and student well-being.
+            </p>
+            <div id="itineraryAccordion" class="space-y-3">
+                </div>
+        </section>
+
+        <section id="budget" class="content-section bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-6">High-Level Budget Overview (USD 20,000)</h2>
+            <p class="mb-6 text-stone-700 leading-relaxed">
+                This section presents the financial plan for the study trip, demonstrating strategic cost optimization to stay within the USD 20,000 budget for 25 students over 7 days. The budget prioritizes value and authentic local experiences. The chart below visualizes the allocation, and the table provides detailed estimates.
+            </p>
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-stone-200">
+                        <thead class="bg-stone-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Category</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Est. Cost (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budgetTableBody" class="bg-white divide-y divide-stone-200 text-sm text-stone-700">
+                            </tbody>
+                         <tfoot class="bg-stone-100 font-semibold">
+                            <tr>
+                                <td class="px-4 py-3 text-left text-sm text-stone-800">TOTAL ESTIMATED</td>
+                                <td class="px-4 py-3 text-left text-sm text-stone-800">$18,000</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-left text-sm text-stone-800">REMAINING BUFFER</td>
+                                <td class="px-4 py-3 text-left text-sm text-teal-600">$2,000</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+             <p class="mt-6 text-sm text-stone-600 leading-relaxed">
+                <strong>Note:</strong> The total estimated budget is $18,000, leaving a $2,000 buffer within the $20,000 constraint, demonstrating prudent financial planning. Cost optimization strategies include group discounts, serviced apartments, local transport, and affordable dining.
+            </p>
+        </section>
+
+        <section id="risks" class="content-section bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-6">Risk Management Plan</h2>
+            <p class="mb-6 text-stone-700 leading-relaxed">
+                A proactive approach to risk management is crucial for a successful international study trip. This section outlines potential risks, their likelihood and impact, and the corresponding mitigation strategies. Click on each risk category to view detailed information. This comprehensive plan aims to ensure student safety and program continuity.
+            </p>
+            <div id="riskAccordion" class="space-y-3">
+                </div>
+        </section>
+
+        <section id="communication" class="content-section bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-teal-700 mb-6">Client Communication Plan</h2>
+            <p class="mb-6 text-stone-700 leading-relaxed">
+                Effective communication with the client (Faculty and/or Staff responsible for the MBA program) is paramount. This plan outlines a strategy for transparent, timely, and proactive communication throughout all phases of the trip, ensuring the client is informed, involved in key decisions, and confident in the program's management.
+            </p>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">Pre-Trip (Planning Phase)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><strong>Kick-off Meeting:</strong> Align on objectives, scope, budget, and expectations.</li>
+                        <li><strong>Weekly Email Updates:</strong> Summaries of planning progress, secured visits, budget status.</li>
+                        <li><strong>Bi-Weekly Check-in Calls:</strong> In-depth discussions, itinerary review, logistical confirmations.</li>
+                        <li><strong>Pre-Departure Briefing:</strong> Final itinerary, emergency protocols, contact info.</li>
+                        <li><strong>Channels:</strong> Formal emails, virtual meetings (Zoom/Teams), presentations.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">During Trip (Execution Phase)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><strong>Daily End-of-Day Summary Email:</strong> Brief on activities, highlights, any issues.</li>
+                        <li><strong>Ad-hoc Urgent Communication:</strong> Immediate phone/email for significant issues requiring client awareness or decision.</li>
+                        <li><strong>Channels:</strong> Email, phone calls, secure messaging app (e.g., WhatsApp).</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">Post-Trip (Evaluation Phase)</h3>
+                    <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><strong>Post-Trip Debrief Meeting:</strong> Review execution, achievements, challenges, student feedback.</li>
+                        <li><strong>Final Report:</strong> Detailed summary of trip lifecycle, financials, outcomes, recommendations.</li>
+                        <li><strong>Channels:</strong> Meetings, formal report submission.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-stone-700 mb-3">Addressing Concerns & Ensuring Client Involvement</h3>
+                     <ul class="list-disc list-inside space-y-2 text-stone-700">
+                        <li><strong>Dedicated Point of Contact:</strong> Program Manager as the primary contact.</li>
+                        <li><strong>Open-Door Policy:</strong> Encourage questions and suggestions at any time.</li>
+                        <li><strong>Clear Decision Points:</strong> Identify decisions requiring client input/approval.</li>
+                        <li><strong>Proactive Feedback Loops:</strong> Solicit feedback at key stages.</li>
+                        <li><strong>Solution-Oriented Communication:</strong> Present issues with proposed solutions.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-200 text-stone-600 py-6 mt-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 MBA Study Trip Plan. Based on Program Manager Exercise.</p>
+            <p>Designed for illustrative and assessment purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentSections = document.querySelectorAll('.content-section');
+        const itineraryAccordion = document.getElementById('itineraryAccordion');
+        const riskAccordion = document.getElementById('riskAccordion');
+        const budgetChartCanvas = document.getElementById('budgetChart');
+        const budgetTableBody = document.getElementById('budgetTableBody');
+
+        const itineraryData = [
+            { day: "Day 1", title: "Arrival & Orientation", details: [
+                { time: "Morning", activity: "Arrival & Check-in", desc: "Arrive at Tan Son Nhat Airport. Private bus transfer to serviced apartments." },
+                { time: "Lunch", activity: "Welcome Lunch", desc: "Authentic local Vietnamese cuisine." },
+                { time: "Afternoon", activity: "Orientation & City Walk", desc: "Orientation session. Guided walking tour of District 1 (Central Post Office, Notre-Dame Cathedral - exteriors)." },
+                { time: "Evening", activity: "Group Dinner & Free Time", desc: "Group dinner. Optional light cultural activity or free time." }
+            ]},
+            { day: "Day 2", title: "Tech & Innovation Focus", details: [
+                { time: "Morning", activity: "Company Visit 1", desc: "FPT Software or Amazon Web Services (AWS) for insights into Vietnam's digital economy." },
+                { time: "Lunch", activity: "Group Lunch", desc: "Near company visit location." },
+                { time: "Afternoon", activity: "Innovation Hub Visit", desc: "Explore Saigon Hi-Tech Park or National University IT & EduTech Hub." },
+                { time: "Evening", activity: "Group Dinner & Free Time", desc: "Group dinner. Optional free time." }
+            ]},
+            { day: "Day 3", title: "Finance & FinTech", details: [
+                { time: "Morning", activity: "Company Visit 2", desc: "VinaCapital for insights into investment strategies and Vietnam's financial market." },
+                { time: "Lunch", activity: "Group Lunch", desc: "Group lunch." },
+                { time: "Afternoon", activity: "Innovation Hub Visit", desc: "Focused discussion at Thu Thiem FinTech Hub on financial technology trends." },
+                { time: "Evening", activity: "Cultural Experience", desc: "Immersive 'Coffee Masterclass' or a guided street food tour by scooter." }
+            ]},
+            { day: "Day 4", title: "Consumer Goods & Entrepreneurship", details: [
+                { time: "Morning", activity: "Company Visit 3", desc: "Vinamilk or Unilever Vietnam, focusing on consumer goods and supply chain management." },
+                { time: "Lunch", activity: "Group Lunch", desc: "Group lunch." },
+                { time: "Afternoon", activity: "Entrepreneurial Insights", desc: "Panel discussion or Q&A with successful local entrepreneurs." },
+                { time: "Evening", activity: "Free Time", desc: "Free time for students." }
+            ]},
+            { day: "Day 5", title: "Historical & Rural Excursion", details: [
+                { time: "Full Day", activity: "Cu Chi Tunnels & Mekong Delta", desc: "Comprehensive tour including lunch. Focus on history and rural life." },
+                { time: "Evening", activity: "Group Dinner", desc: "Return to HCMC. Group dinner to reflect on the day." }
+            ]},
+            { day: "Day 6", title: "Markets, History & Team Building", details: [
+                { time: "Morning", activity: "Market & History Visit", desc: "Visit Ben Thanh Market for local commerce insights, followed by the War Remnants Museum." },
+                { time: "Lunch", activity: "Casual Lunch", desc: "At or near Ben Thanh Market (street food focus)." },
+                { time: "Afternoon", activity: "Team Building Activity", desc: "Structured team-building (e.g., cultural scavenger hunt, cooking class)." },
+                { time: "Evening", activity: "Farewell Dinner", desc: "Slightly more upscale group dinner." }
+            ]},
+            { day: "Day 7", title: "Departure", details: [
+                { time: "Morning", activity: "Breakfast & Check-out", desc: "Breakfast at serviced apartments. Free time for last-minute activities." },
+                { time: "Late Morning", activity: "Departure", desc: "Check-out. Private bus transfer to Tan Son Nhat Airport." }
+            ]}
+        ];
+
+        const riskData = [
+            { category: "Health & Safety", specificRisk: "Foodborne Illness / Minor Injuries / Heatstroke", likelihood: "Medium", impact: "High", mitigation: "Pre-trip guidance on vaccinations, insurance, food/water safety. First-aid kit, medical contacts, hydration encouragement, reputable food vendors." },
+            { category: "Travel Disruptions", specificRisk: "Flight Delays / Traffic Congestion / Vehicle Breakdown", likelihood: "Medium", impact: "Medium", mitigation: "Buffer time in itinerary. Reputable bus rental with contingency. Monitor traffic. Alternative transport options (Grab, taxis) ready." },
+            { category: "Budget Overruns", specificRisk: "Unexpected Costs / Miscalculations / Currency Fluctuations", likelihood: "Medium", impact: "High", mitigation: "15% contingency fund. Thorough cost research, group rate negotiation. Real-time expense tracking. Prioritize essentials if cuts needed." },
+            { category: "Logistical Challenges", specificRisk: "Difficulty Securing Company Visits / Language Barriers / Miscommunication", likelihood: "Medium", impact: "Medium", mitigation: "Early contact with companies (3-6 months), backup options. Leverage alumni/faculty. Briefing on local customs. Local guides for translation. Local SIM." }
+        ];
+
+        const budgetData = {
+            labels: ['Accommodation', 'On-Ground Travel', 'Meals', 'Activities & Fees', 'Workshops/Guides', 'Contingency', 'Admin Fees'],
+            datasets: [{
+                label: 'Budget Allocation',
+                data: [4500, 3000, 2800, 2800, 1500, 2200, 1200],
+                backgroundColor: [
+                    '#0D9488', // teal-600
+                    '#0F766E', // teal-700
+                    '#14B8A6', // teal-500
+                    '#5EEAD4', // teal-300
+                    '#99F6E4', // teal-200
+                    '#A78BFA', // violet-400 (accent for contingency)
+                    '#7DD3FC'  // sky-300 (accent for admin)
+                ],
+                borderColor: '#FFFFFF', // white
+                borderWidth: 2,
+                hoverOffset: 4
+            }]
+        };
+        
+        const budgetTableData = [
+            { category: 'Accommodation', cost: '$4,500' },
+            { category: 'On-Ground Travel', cost: '$3,000' },
+            { category: 'Meals', cost: '$2,800' },
+            { category: 'Activities & Entrance Fees', cost: '$2,800' },
+            { category: 'Workshops / Guest Speakers / Local Guides', cost: '$1,500' },
+            { category: 'Contingency (15%)', cost: '$2,200' },
+            { category: 'Program Management & Admin Fees', cost: '$1,200' }
+        ];
+
+        function createAccordionItem(id, title, contentHtml, parentElement) {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('border', 'border-stone-200', 'rounded-lg', 'shadow-sm', 'overflow-hidden');
+
+            const button = document.createElement('button');
+            button.classList.add('w-full', 'p-4', 'text-left', 'bg-stone-50', 'hover:bg-stone-100', 'focus:outline-none', 'transition', 'duration-150', 'ease-in-out', 'flex', 'justify-between', 'items-center');
+            button.setAttribute('aria-expanded', 'false');
+            button.setAttribute('aria-controls', `content-${id}`);
+            
+            const titleSpan = document.createElement('span');
+            titleSpan.classList.add('text-lg', 'font-medium', 'text-teal-700');
+            titleSpan.textContent = title;
+            button.appendChild(titleSpan);
+
+            const iconSpan = document.createElement('span');
+            iconSpan.classList.add('transform', 'transition-transform', 'duration-300', 'text-teal-600');
+            iconSpan.innerHTML = '&#x25BC;'; // Down arrow
+            button.appendChild(iconSpan);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.id = `content-${id}`;
+            contentDiv.classList.add('accordion-content', 'p-4', 'bg-white', 'border-t', 'border-stone-200');
+            contentDiv.innerHTML = contentHtml;
+
+            itemDiv.appendChild(button);
+            itemDiv.appendChild(contentDiv);
+            parentElement.appendChild(itemDiv);
+
+            button.addEventListener('click', () => {
+                const isOpening = !contentDiv.classList.contains('open');
+                // Close all other accordions in the same group
+                Array.from(parentElement.querySelectorAll('.accordion-content.open')).forEach(openContent => {
+                    if (openContent !== contentDiv) {
+                        openContent.classList.remove('open');
+                        openContent.previousElementSibling.setAttribute('aria-expanded', 'false');
+                        openContent.previousElementSibling.querySelector('span:last-child').style.transform = 'rotate(0deg)';
+                    }
+                });
+                // Toggle current accordion
+                contentDiv.classList.toggle('open');
+                button.setAttribute('aria-expanded', isOpening);
+                iconSpan.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        }
+
+        // Populate Itinerary
+        itineraryData.forEach((item, index) => {
+            let detailsHtml = '<ul class="space-y-3 list-disc list-inside pl-2 text-stone-700">';
+            item.details.forEach(detail => {
+                detailsHtml += `<li class="leading-relaxed"><strong class="text-stone-800">${detail.time} - ${detail.activity}:</strong> ${detail.desc}</li>`;
+            });
+            detailsHtml += '</ul>';
+            createAccordionItem(`itinerary-${index}`, `${item.day}: ${item.title}`, detailsHtml, itineraryAccordion);
+        });
+
+        // Populate Risks
+        riskData.forEach((item, index) => {
+            let riskHtml = `<div class="space-y-2 text-stone-700">
+                <p><strong class="text-stone-800">Specific Risk:</strong> ${item.specificRisk}</p>
+                <p><strong class="text-stone-800">Likelihood:</strong> <span class="font-semibold ${item.likelihood === 'High' ? 'text-red-600' : item.likelihood === 'Medium' ? 'text-amber-600' : 'text-green-600'}">${item.likelihood}</span></p>
+                <p><strong class="text-stone-800">Impact:</strong> <span class="font-semibold ${item.impact === 'High' ? 'text-red-600' : item.impact === 'Medium' ? 'text-amber-600' : 'text-green-600'}">${item.impact}</span></p>
+                <p><strong class="text-stone-800">Mitigation Strategy:</strong> ${item.mitigation}</p>
+            </div>`;
+            createAccordionItem(`risk-${index}`, item.category, riskHtml, riskAccordion);
+        });
+        
+        // Populate Budget Table
+        budgetTableData.forEach(item => {
+            const row = budgetTableBody.insertRow();
+            const cellCategory = row.insertCell();
+            const cellCost = row.insertCell();
+            cellCategory.textContent = item.category;
+            cellCategory.classList.add('px-4', 'py-3', 'whitespace-nowrap');
+            cellCost.textContent = item.cost;
+            cellCost.classList.add('px-4', 'py-3', 'whitespace-nowrap');
+        });
+
+
+        // Tab Navigation
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('text-stone-600');
+                });
+                button.classList.add('active');
+                button.classList.remove('text-stone-600');
+
+
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetTab) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Initialize Budget Chart
+        if (budgetChartCanvas) {
+             new Chart(budgetChartCanvas, {
+                type: 'doughnut',
+                data: budgetData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter, sans-serif'
+                                },
+                                color: '#44403C', // stone-700
+                                padding: 15,
+                                boxWidth: 12,
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                    }
+                                    // Label wrapping logic (simplified for tooltip)
+                                    const maxWordsPerLine = 3;
+                                    const words = label.split(' ');
+                                    let lines = [];
+                                    let currentLine = '';
+                                    words.forEach((word, index) => {
+                                        currentLine += word + ' ';
+                                        if ((index + 1) % maxWordsPerLine === 0 || index === words.length - 1) {
+                                            lines.push(currentLine.trim());
+                                            currentLine = '';
+                                        }
+                                    });
+                                    return lines;
+                                }
+                            },
+                            backgroundColor: '#1F2937', // gray-800
+                            titleFont: { size: 14, family: 'Inter, sans-serif', weight: 'bold' },
+                            bodyFont: { size: 12, family: 'Inter, sans-serif' },
+                            padding: 10,
+                            cornerRadius: 4,
+                            displayColors: true,
+                            boxPadding: 3
+                        },
+                        title: {
+                            display: true,
+                            text: 'Budget Allocation by Category',
+                            font: {
+                                size: 16,
+                                family: 'Inter, sans-serif',
+                                weight: '600'
+                            },
+                            color: '#1F2937', // gray-800
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        }
+                    },
+                    cutout: '60%' 
+                }
+            });
+        }
+
+        // Set overview as default active tab on load
+        document.querySelector('.tab-button[data-tab="overview"]').click();
+
+    </script>
+</body>
+</html>
+
